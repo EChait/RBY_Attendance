@@ -1,7 +1,7 @@
-﻿using CRUDOperationsDemo;
+﻿using School;
 using School.Models;
 using Microsoft.AspNetCore.Mvc;
-using CRUDOperationsDemo.Models;
+using School.Models;
 
 namespace School.Controllers
 {
@@ -49,7 +49,7 @@ namespace School.Controllers
 
             item.teacherId = teacherId;
             item.teacherName = _context.users.Single(item => item.Id == teacherId).FirstName + " " + _context.users.Single(item => item.Id == teacherId).LastName;
-            item.users = _context.users;
+            item.users = _context.users.ToList();
 
             if (subjectName == "")
             {
@@ -57,25 +57,27 @@ namespace School.Controllers
             }
 
             item.subjectName = subjectName;
-            foreach (var modelItem in _context.semesterTeacherSubjects)
-            {
-                if(modelItem.TeacherId == teacherId)
-                {
-                    subjectId = modelItem.SubjectId;
-                    listSubjects.Add(_context.subjects.Single(temp => temp.Id == subjectId));
-                }
-            }
+            //foreach (var modelItem in _context.semesterTeacherSubjects)
+            //{
+            //    if(modelItem.TeacherId == teacherId)
+            //    {
+            //        subjectId = modelItem.SubjectId;
+            //        listSubjects.Add(_context.subjects.Single(temp => temp.Id == subjectId));
+            //    } 
+            //}
 
-            item.subjects = listSubjects;
+            item.subjects = _context.subjects.Where(subject => _context.semesterTeacherSubjects
+                .Any(sts => sts.TeacherId == teacherId && sts.SubjectId == subject.Id))
+                .ToList(); 
 
-            foreach(var itemModel in _context.enrolls)
-            {
-                if(itemModel.Teacher == item.teacherName && itemModel.Subject == item.subjectName)
-                {
-                    listEnrolls.Add(itemModel);
-                }
-            }    
-            item.enrolls = listEnrolls;
+            //foreach(var itemModel in _context.enrolls)
+            //{
+            //    if(itemModel.Teacher == item.teacherName && itemModel.Subject == item.subjectName)
+            //    {
+            //        listEnrolls.Add(itemModel);
+            //    }
+            //}    
+            item.enrolls = _context.enrolls.Where(itemModel => itemModel.Teacher == item.teacherName && itemModel.Subject == item.subjectName);
             return View(item);
         }
 

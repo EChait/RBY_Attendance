@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using CRUDOperationsDemo.Models;
+using School.Models;
 
 namespace School.Models
 {

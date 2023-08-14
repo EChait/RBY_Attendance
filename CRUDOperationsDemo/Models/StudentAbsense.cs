@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using School.Models;
 
 namespace School.Models
 {
@@ -18,7 +19,10 @@ namespace School.Models
         [Required]
         [Display(Name = "StudentId")]
         [Column(TypeName = "int")]
+        [ForeignKey("Student")]
         public int StudentId { get; set; } = 0;
+
+        public User Student { get; set; } = new User();
 
         [Required]
         [Display(Name = "Subject")]
@@ -48,7 +52,7 @@ namespace School.Models
 
         [Required]
         [Display(Name = "Note")]
-        [Column(TypeName = "string")]
+        [Column(TypeName = "nvarchar(50)")]
         public string Note { get; set; } = string.Empty;
     }
 }

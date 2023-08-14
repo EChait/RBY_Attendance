@@ -1,8 +1,7 @@
-﻿using CRUDOperationsDemo;
-using CRUDOperationsDemo.Models;
+﻿using School;
+using School.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using School.Models;
 
 namespace School.Controllers
 {

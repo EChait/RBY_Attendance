@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CRUDOperationsDemo.Models;
-using CRUDOperationsDemo;
+using School.Models;
+using School;
 using System.Linq;
 using System.Threading.Tasks;
 

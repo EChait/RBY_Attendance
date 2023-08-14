@@ -71,9 +71,9 @@
                 else
                     continue;
 
-                @foreach (var item2 in Model.records)
+                @foreach (var attendanceRecord in Model.records)
                 {
-                    @if(item.subject != item2.subject)
+                    @if(item.subject != attendanceRecord.subject)
                     {
                         continue;
                     }
@@ -83,9 +83,9 @@
                             <div class="col-4">
                                 <div class="fs-5 d-flex" style="column-gap: 20px;">
                                     <select class="itemTypes" style="width:50%" aria-label="Input Teacher">
-                                        @foreach (var type in item2.types)
+                                        @foreach (var type in Model.absenseTypes)
                                         {
-                                            @if(item2.type == type)
+                                            @if(attendanceRecord.type == type)
                                             {
                                                 <option style="color: rgb(156, 98, 11);width:50% !important" id=@Html.DisplayFor(modelItem => type) selected="selected">@Html.DisplayFor(modelItem => type)</option>
                                             }
@@ -95,13 +95,13 @@
                                             }
                                         }
                                     </select>
-                                    <div>@Html.DisplayFor(modelItem => item2.student)</div>
+                                    <div>@Html.DisplayFor(modelItem => attendanceRecord.student)</div>
                                 </div>
                             </div>
                             <div class="col-8">
                                 <div class="fs-5 d-flex" style="column-gap: 20px;">
                                     <div style="color: rgb(156, 98, 11); min-width: 150px;">Add Note:</div>
-                                    <input type="text" id=@Html.DisplayFor(modelItem => item2.Id) class="inputAddNote" value="@Html.DisplayFor(modelItem => item2.note)"/>
+                                    <input type="text" id=@Html.DisplayFor(modelItem => attendanceRecord.Id) class="inputAddNote" value="@Html.DisplayFor(modelItem => attendanceRecord.note)"/>
                                 </div>
                             </div>
                         </div>

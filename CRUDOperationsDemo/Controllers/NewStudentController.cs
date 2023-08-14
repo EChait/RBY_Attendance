@@ -1,5 +1,5 @@
-﻿using CRUDOperationsDemo;
-using CRUDOperationsDemo.Models;
+﻿using School;
+using School.Models;
 using Microsoft.AspNetCore.Mvc;
 using School.Models;
 

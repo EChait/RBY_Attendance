@@ -23,11 +23,15 @@ namespace School.Models
         [Required]
         [Display(Name = "TeacherId")]
         [Column(TypeName = "int")]
+        [ForeignKey("Teacher")]
         public int TeacherId { get; set; } = 0;
+        public User Teacher { get; set; } = new  User();
 
         [Required]
         [Display(Name = "SubjectId")]
         [Column(TypeName = "int")]
+        [ForeignKey("Subjects")]
         public int SubjectId { get; set; } = 0;
+        public Subject Subject { get; set; } = new Subject();
     }
 }

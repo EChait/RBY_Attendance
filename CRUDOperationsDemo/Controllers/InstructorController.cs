@@ -1,5 +1,5 @@
-﻿using CRUDOperationsDemo;
-using CRUDOperationsDemo.Models;
+﻿using School;
+using School.Models;
 using Microsoft.AspNetCore.Mvc;
 using School.Models;
 using System.Linq;
@@ -20,44 +20,36 @@ namespace School.Controllers
         public IActionResult Index()
         {
             int teacherId = 0;
-            InstructorViewModel instructor = new InstructorViewModel();
-            instructor.subjects = new List<Subject>();
-            instructor.tsubject = new List<Subject>();
-            instructor.users = new List<User>();
-            instructor.teacher = new User();
+            InstructorViewModel instructorVM = new InstructorViewModel();
+            instructorVM.subjects = new List<Subject>();
+            instructorVM.tsubject = new List<Subject>();
+            instructorVM.users = new List<User>();
+            instructorVM.teacher = new User();
 
             List<User> users = new List<User>();
             List<Subject> tsubjects = new List<Subject>();
 
-            instructor.subjects = _context.subjects;
-            instructor.users = _context.users;
+            instructorVM.subjects = _context.subjects.ToList();
+            instructorVM.users = _context.users.Where(u => u.Title == "teacher").ToList();
 
             if (TempData["instTeacherId"] != null)
             {
                 teacherId = (int)TempData["instTeacherId"];
+                instructorVM.teacherId = teacherId;
+                instructorVM.teacher = _context.users.FirstOrDefault(a => a.Id == teacherId);
             }
-
-            if(teacherId == 0)
+            else
             {
-                instructor.teacher = _context.users.FirstOrDefault(a => a.Title == "teacher");
-                teacherId = _context.users.FirstOrDefault(a => a.Title == "teacher").Id;
+                //If no teacher selected default to first teacher
+                instructorVM.teacher = _context.users.FirstOrDefault(a => a.Title == "teacher");
+                teacherId = instructorVM.teacher.Id;
             }
 
-            instructor.teacherId = teacherId;
-            foreach(var item in _context.semesterTeacherSubjects)
-            {
-                if(item.TeacherId == teacherId)
-                {
-                    Subject temp = new Subject();
-                    temp = _context.subjects.Find(item.SubjectId);
-                    tsubjects.Add(temp);
-                }
-            }
+            var semesterTeacherSubjects = _context.semesterTeacherSubjects.Where(sts => sts.TeacherId == teacherId).ToList();            
+            instructorVM.tsubject = semesterTeacherSubjects.Select(sts => sts.Subject).ToArray();
 
-            instructor.tsubject = (IEnumerable<Subject>)tsubjects;
-
-            Console.Write(instructor.teacher);
-            return View(instructor);
+            Console.Write(instructorVM.teacher);
+            return View(instructorVM);
         }
         
         [HttpPost]
@@ -65,20 +57,15 @@ namespace School.Controllers
         {
             temp.ClientId = 1;
             temp.SemesterId = 1;
-            bool flag = false;
 
-            foreach(var item in _context.semesterTeacherSubjects)
+            var isExistingSTS = _context.semesterTeacherSubjects.Any(sts => sts.TeacherId == temp.TeacherId && sts.SubjectId == temp.SubjectId);
+            if (!isExistingSTS)
             {
-                if(item.TeacherId == temp.TeacherId && item.SubjectId == temp.SubjectId)
-                {
-                    flag = true;
-                }
-            }
-            if(flag == false)
-            {
+                temp.Subject = _context.subjects.FirstOrDefault(a => a.Id == temp.SubjectId);
+                temp.Teacher = _context.users.FirstOrDefault(a => a.Id == temp.TeacherId);
                 _context.semesterTeacherSubjects.Add(temp);
+                _context.SaveChanges();
             }
-            _context.SaveChanges();
             TempData["instTeacherId"] = temp.TeacherId;
             return Json(true);
         }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CRUDOperationsDemo.Models;
+using School.Models;
 using School.Models;
 
-namespace CRUDOperationsDemo.Controllers
+namespace School.Controllers
 {
     public class StudentController : Controller
     {

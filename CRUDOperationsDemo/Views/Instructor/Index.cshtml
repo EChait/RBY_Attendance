@@ -27,7 +27,7 @@
                     {
                     @if(item.Title == "teacher")
                         {
-                        if(item.Id == @Model.teacherId)
+                        if(item.Id == @Model.teacher.Id)
                         {
                             <option id=@Html.DisplayFor(modelItem => item.Id) selected="selected">@Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)</option>
                         }

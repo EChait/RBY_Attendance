@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CRUDOperationsDemo.Models;
-using CRUDOperationsDemo;
+using School.Models;
+using School;
 using School.Models;
 
 namespace School.Controllers
@@ -40,6 +40,7 @@ namespace School.Controllers
 
             attendance.teacherId = teacherId;
             attendance.teacherName = _context.users.Single(model => model.Email == Email).FirstName + " " + _context.users.Single(item => item.Email == Email).LastName;
+
 
             foreach (var item in _context.semesterTeacherSubjects)
             {

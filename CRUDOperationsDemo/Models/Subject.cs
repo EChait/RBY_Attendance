@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CRUDOperationsDemo.Models
+namespace School.Models
 {
     [Table("Subject")]
     public class Subject
     {
         [Key]
         [Display(Name = "Id")]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [Display(Name = "Name")]

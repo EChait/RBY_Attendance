@@ -1,5 +1,6 @@
-﻿using CRUDOperationsDemo;
+﻿using School;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using School.Models;
 using System;
@@ -61,29 +62,25 @@ namespace School.Controllers
             RecordLogViewModel record = new RecordLogViewModel();
             record.semester = "Semester";
 
-            foreach (var semester_item in _context.semesters)
-            {
-                if (toDate.Date >= semester_item.FromDate && toDate.Date <= semester_item.EndDate)
-                {
-                    record.semester = semester_item.Name;
-                    break;
-                }
-            }
+            var semester = _context.semesters.FirstOrDefault(s => toDate.Date >= s.FromDate && toDate.Date <= s.EndDate);
+            record.semester = semester?.Name;
 
-            foreach (var item in _context.studentAbsenses)
+            record.absenseTypes.Add("Absent Excused");
+            record.absenseTypes.Add("Absent Unexcused");
+            record.absenseTypes.Add("Mandated Absence");
+            record.absenseTypes.Add("Excused Late");
+            record.absenseTypes.Add("Infraction");
+            record.absenseTypes.Add("Late");
+            record.absenseTypes.Add("Present");
+
+            var studentAbsenses = _context.studentAbsenses.Where(a => a.AbsenseType != 1 && a.AuditDate == toDate)
+                .Include(sa => sa.Student)
+                .ToList();
+
+            foreach (var item in studentAbsenses)
             {
-                if( item.AuditDate.ToShortDateString() == toDate.ToShortDateString() &&
-                    (item.AbsenseType != 1))
-                {
                     RecordLogItem temp = new RecordLogItem();
 
-                    temp.types.Add("Absent Excused");
-                    temp.types.Add("Absent Unexcused");
-                    temp.types.Add("Mandated Absence");
-                    temp.types.Add("Excused Late");
-                    temp.types.Add("Infraction");
-                    temp.types.Add("Late");
-                    temp.types.Add("Present");
 
                     if (item.AbsenseType == 2) temp.type = "Late"; 
                     if (item.AbsenseType == 3) temp.type = "Absent Unexcused";
@@ -99,11 +96,10 @@ namespace School.Controllers
                         temp.isNote = false;
                     
                     temp.subject = item.Subject;
-                    temp.student = _context.users.Find(item.StudentId).FirstName + " " + _context.users.Find(item.StudentId).LastName;
-                    temp.period = _context.subjects.First(a => a.Name == item.Subject).PeriodCount;
+                    temp.student = item.Student.FirstName + " " + item.Student.LastName;
+                    temp.period = _context.subjects.FirstOrDefault(s => s.Name == item.Subject)?.PeriodCount ?? 0;
 
                     absenses.Add(temp);
-                }
             }
 
             record.date = toDate;

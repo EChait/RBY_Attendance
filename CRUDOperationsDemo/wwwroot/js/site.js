@@ -199,7 +199,8 @@ $(document).ready(function () {
     })
 
     $("#teacherSubmit").click(function () {
-
+        $(this).prop('disabled', true);
+        $(this).text('Processing...');
         var date = new Date($("#dateTeacher").text());
 
         var sendData = [];

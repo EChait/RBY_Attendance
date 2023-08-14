@@ -1,8 +1,8 @@
-﻿using CRUDOperationsDemo.Models;
+﻿using School.Models;
 using Microsoft.EntityFrameworkCore;
 using School.Models;
 
-namespace CRUDOperationsDemo
+namespace School.Models
 {
     public class SchoolDbContext : DbContext
     {

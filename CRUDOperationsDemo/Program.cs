@@ -1,5 +1,6 @@
-using CRUDOperationsDemo;
+using School;
 using Microsoft.EntityFrameworkCore;
+using School.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

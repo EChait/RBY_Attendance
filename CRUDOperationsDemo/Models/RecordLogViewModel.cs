@@ -9,6 +9,7 @@
         public string semester { get; set; } = String.Empty;
 
         public IEnumerable<RecordLogItem> records { get; set; } = new List<RecordLogItem>();
+        public List<string> absenseTypes { get; set; } = new List<string>();
     }
 
     public class RecordLogItem
@@ -21,7 +22,6 @@
 
         public int period { get;set; } = 0;
 
-        public List<string> types { get; set; } = new List<string>();
 
         public string type { get; set; } = String.Empty;
 

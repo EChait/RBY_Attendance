@@ -1,4 +1,4 @@
-﻿using CRUDOperationsDemo.Models;
+﻿using School.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace School.Models

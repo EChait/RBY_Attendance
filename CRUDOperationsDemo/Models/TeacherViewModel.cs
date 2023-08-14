@@ -1,4 +1,4 @@
-﻿using CRUDOperationsDemo.Models;
+﻿using School.Models;
 
 namespace School.Models
 {
