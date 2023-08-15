@@ -73,8 +73,8 @@ namespace School.Controllers
             record.absenseTypes.Add("Late");
             record.absenseTypes.Add("Present");
 
-            var studentAbsenses = _context.studentAbsenses.Where(a => a.AbsenseType != 1 && a.AuditDate == toDate)
-                .Include(sa => sa.Student)
+            
+            var studentAbsenses = _context.studentAbsenses.Where(a => a.AbsenseType != 1 && a.AuditDate.Date == toDate)
                 .ToList();
 
             foreach (var item in studentAbsenses)
@@ -96,7 +96,8 @@ namespace School.Controllers
                         temp.isNote = false;
                     
                     temp.subject = item.Subject;
-                    temp.student = item.Student.FirstName + " " + item.Student.LastName;
+                    var student = _context.users.Single(s => s.Id == item.StudentId);
+                    temp.student = student.FirstName + " " + student.LastName;
                     temp.period = _context.subjects.FirstOrDefault(s => s.Name == item.Subject)?.PeriodCount ?? 0;
 
                     absenses.Add(temp);
@@ -106,6 +107,19 @@ namespace School.Controllers
             record.dayOfWeek = toDate.DayOfWeek.ToString();
             record.records = absenses;
 
+
+            var presentStudents = _context.studentAbsenses.Where(a => a.AuditDate.Date == toDate
+                                                                 && (a.AbsenseType == 1 || a.AbsenseType == 2 || a.AbsenseType == 7))
+                                                          .Select(a => a.StudentId)
+                                                          .Distinct()
+                                                          .ToList();
+
+            var absentStudents = studentAbsenses.Where(sa => sa.AbsenseType == 3 || sa.AbsenseType == 4 || sa.AbsenseType == 5)
+                                                        .Select(a => a.StudentId)
+                                                        .Distinct()
+                                                        .Where(sa => !presentStudents.Any(ps => ps == sa));
+
+            record.totalStudentsAbsent = absentStudents.Count();
             return View(record);
         }
     }

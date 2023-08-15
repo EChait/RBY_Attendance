@@ -37,6 +37,14 @@
                         @Model.semester
                     </div>
                 </div>
+                <div class="d-flex justify-content-start align-items-center fs-4">
+                    <div style="color :red">
+                        Total students absent : &nbsp;
+                    </div>
+                    <div class="">
+                        @Model.totalStudentsAbsent
+                    </div>
+                </div>
             </div>
             <div class="col-4">
                 <div class="d-flex justify-content-center align-items-center h-100">
@@ -101,7 +109,7 @@
                             <div class="col-8">
                                 <div class="fs-5 d-flex" style="column-gap: 20px;">
                                     <div style="color: rgb(156, 98, 11); min-width: 150px;">Add Note:</div>
-                                    <input type="text" id=@Html.DisplayFor(modelItem => attendanceRecord.Id) class="inputAddNote" value="@Html.DisplayFor(modelItem => attendanceRecord.note)"/>
+                                    <input style="flex:1;" type="text" id=@Html.DisplayFor(modelItem => attendanceRecord.Id) class="inputAddNote" value="@Html.DisplayFor(modelItem => attendanceRecord.note)"/>
                                 </div>
                             </div>
                         </div>
