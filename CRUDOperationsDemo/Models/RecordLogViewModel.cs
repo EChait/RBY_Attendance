@@ -10,6 +10,7 @@
 
         public IEnumerable<RecordLogItem> records { get; set; } = new List<RecordLogItem>();
         public List<string> absenseTypes { get; set; } = new List<string>();
+        public int totalStudentsAbsent { get; set; } = 0;
     }
 
     public class RecordLogItem
