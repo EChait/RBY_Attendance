@@ -19,10 +19,7 @@ namespace School.Models
         [Required]
         [Display(Name = "StudentId")]
         [Column(TypeName = "int")]
-        [ForeignKey("Student")]
         public int StudentId { get; set; } = 0;
-
-        public User Student { get; set; } = new User();
 
         [Required]
         [Display(Name = "Subject")]
