@@ -20,21 +20,18 @@ namespace School.Controllers
             foreach(var std in logItems)
             {
                 std.AuditDate = DateTime.Now;
-                bool flag = false;
 
-                foreach (var item in _context.studentAbsenses)
+                var existingRecord = _context.studentAbsenses.SingleOrDefault(item => item.StudentId == std.StudentId
+                                                                                    && item.Subject == std.Subject
+                                                                                    && item.Teacher == std.Teacher
+                                                                                    && item.Date == std.Date);
+                if (existingRecord != null)
                 {
-                    if (item.StudentId == std.StudentId && (item.Subject == std.Subject && item.Teacher == std.Teacher) && item.Date == std.Date)
-                    {
-                        item.AbsenseType = std.AbsenseType;
-                        item.Note = std.Note;
-                        item.Date = std.Date;
-
-                        flag = true;
-                    }
+                        existingRecord.AbsenseType = std.AbsenseType;
+                        existingRecord.Note = std.Note;
+                        existingRecord.Date = std.Date;
                 }
-
-                if (flag == false)
+                else
                 {
                     _context.studentAbsenses.Add(std);
                 }

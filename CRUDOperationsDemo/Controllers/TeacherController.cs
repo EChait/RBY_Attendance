@@ -2,6 +2,7 @@
 using School.Models;
 using School;
 using School.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace School.Controllers
 {
@@ -35,22 +36,18 @@ namespace School.Controllers
         public IActionResult Attendance(string subject)
         {
             var Email = TempData["email"] as string;
-            AttendanceViewModel attendance = new AttendanceViewModel();
+            AttendanceViewModel attendanceVM = new AttendanceViewModel();
             int teacherId = _context.users.Single(item => item.Email == Email).Id;
 
-            attendance.teacherId = teacherId;
-            attendance.teacherName = _context.users.Single(model => model.Email == Email).FirstName + " " + _context.users.Single(item => item.Email == Email).LastName;
+            attendanceVM.teacherId = teacherId;
+            var teacher = _context.users.Single(model => model.Email == Email);
+            attendanceVM.teacherName = teacher.FirstName + " " + teacher.LastName;
 
-
-            foreach (var item in _context.semesterTeacherSubjects)
-            {
-                if(item.TeacherId == teacherId)
-                {
-                    attendance.subjects.Add(_context.subjects.Single(modelItem => modelItem.Id == item.SubjectId));
-                }
-            }    
-
-            return View(attendance);
+            attendanceVM.subjects = _context.semesterTeacherSubjects
+                                        .Where(sts => sts.TeacherId == teacherId)
+                                        .Include(sts=>sts.Subject)
+                                        .Select(sts => sts.Subject).ToList();
+            return View(attendanceVM);
         }
 
         public IActionResult Edit()
@@ -67,7 +64,7 @@ namespace School.Controllers
             else
                 return View();
         }
-        public IActionResult Detail()
+        public IActionResult Detail() //This is page where teacher takes attendance
         {
             string teacherName = TempData["AttTeacherName"] as string;
 
